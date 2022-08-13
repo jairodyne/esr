@@ -56,7 +56,8 @@ public class SpringFoxConfig {
       .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, CozinhaModel.class), CozinhasModelOpenapi.class))
       .apiInfo(apiInfo())
       .tags(new Tag("Cidades", "Gerencia as Cidades do bagulho"),
-    	        new Tag("Grupos", "Gerencia os grupos de usuários") );
+	        new Tag("Grupos", "Gerencia os grupos de usuários"), 
+	        new Tag("Cozinhas", "Gerencia as cozinhas"));
   }
   
   
