@@ -5,6 +5,6 @@ import com.algaworks.algafood.api.model.CozinhaModel;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel("CozinhasModel")
-public class CozinhasModelOpenapi extends PagedModelOpenapi<CozinhaModel> {
+public class CozinhasModelOpenapi extends PagedModelOpenApi<CozinhaModel> {
 
 }
