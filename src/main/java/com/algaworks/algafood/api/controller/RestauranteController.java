@@ -21,6 +21,7 @@ import com.algaworks.algafood.api.assembler.RestauranteModelAssembler;
 import com.algaworks.algafood.api.model.RestauranteModel;
 import com.algaworks.algafood.api.model.input.RestauranteInput;
 import com.algaworks.algafood.api.model.view.RestauranteView;
+import com.algaworks.algafood.api.openapi.model.RestauranteBasicoModelOpenApi;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -29,6 +30,10 @@ import com.algaworks.algafood.domain.model.Restaurante;
 import com.algaworks.algafood.domain.repository.RestauranteRepository;
 import com.algaworks.algafood.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.annotation.JsonView;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = "/restaurantes")
@@ -67,12 +72,17 @@ public class RestauranteController {
 //		return restaurantesWrapper;
 //	}
 	
+	@ApiOperation(value = "Lista Restaurantes", response = RestauranteBasicoModelOpenApi.class)
+	@ApiImplicitParams({
+		@ApiImplicitParam(value = "Nome da projeção de Restaurantes", allowableValues = "apenas-nome", name = "projecao", paramType = "query", type = "string")
+	})
 	@JsonView(RestauranteView.Resumo.class)
 	@GetMapping
 	public List<RestauranteModel> listar(){
 		return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
 	}
 	
+	@ApiOperation(value = "Lista Restaurantes", hidden = true)
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome") 
 	public List<RestauranteModel> listarApenasNomes(){
