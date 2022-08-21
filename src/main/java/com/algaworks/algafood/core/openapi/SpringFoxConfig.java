@@ -1,5 +1,10 @@
 package com.algaworks.algafood.core.openapi;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,6 +27,7 @@ import com.algaworks.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import io.github.classgraph.Resource;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
@@ -64,7 +70,7 @@ public class SpringFoxConfig {
 //              .build())
 //)
       .additionalModels(typeResolver.resolve(Problem.class))
-      .ignoredParameterTypes(ServletWebRequest.class)
+      .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class, Resource.class, File.class, InputStream.class)
       .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
       .alternateTypeRules(AlternateTypeRules.newRule(typeResolver.resolve(Page.class, CozinhaModel.class), CozinhasModelOpenapi.class))
       .alternateTypeRules(AlternateTypeRules.newRule(
