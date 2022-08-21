@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public interface CidadeControllerOpenApi {
 
 	@ApiOperation("Lista as cidades")
-	public List<CidadeModel> listar();
+	List<CidadeModel> listar();
 
 	@ApiOperation("Busca uma cidade por Id")
 	@ApiResponses({
@@ -27,13 +27,13 @@ public interface CidadeControllerOpenApi {
 		@ApiResponse(responseCode = "400", description = "ID da cidade é inválido", 
 		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
 	})
-	public CidadeModel buscar(
+	CidadeModel buscar(
 			@ApiParam(name = "cidadeId", value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId);
 
 	
 	@ApiOperation("Cadastra uma cidade")
-	public CidadeModel adicionar(
+	CidadeModel adicionar(
 			@ApiParam(name = "corpo", value = "Representação de uma nova cidade", required = true)
 			CidadeInput cidadeInput);
 	
@@ -45,7 +45,7 @@ public interface CidadeControllerOpenApi {
 		@ApiResponse(responseCode = "400", description = "Cidade não encontrada", 
 		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
 	})
-	public CidadeModel atualizar(
+	CidadeModel atualizar(
 			@ApiParam(value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId,
 			@ApiParam(name = "corpo",  value = "Representação de uma cidade com os novos dados") 
@@ -53,7 +53,7 @@ public interface CidadeControllerOpenApi {
 
 
 	@ApiOperation("Exclui uma cidade por Id")
-	public void remover(
+	void remover(
 			@ApiParam(value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId);
 	
