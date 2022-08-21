@@ -28,13 +28,13 @@ public interface CidadeControllerOpenApi {
 		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
 	})
 	public CidadeModel buscar(
-			@ApiParam(name = "cidadeId", value = "ID de uma cidade", example = "1") 
+			@ApiParam(name = "cidadeId", value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId);
 
 	
 	@ApiOperation("Cadastra uma cidade")
 	public CidadeModel adicionar(
-			@ApiParam(name = "corpo", value = "Representação de uma nova cidade")
+			@ApiParam(name = "corpo", value = "Representação de uma nova cidade", required = true)
 			CidadeInput cidadeInput);
 	
 	
@@ -46,7 +46,7 @@ public interface CidadeControllerOpenApi {
 		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
 	})
 	public CidadeModel atualizar(
-			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@ApiParam(value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId,
 			@ApiParam(name = "corpo",  value = "Representação de uma cidade com os novos dados") 
 			CidadeInput cidadeInput);
@@ -54,7 +54,7 @@ public interface CidadeControllerOpenApi {
 
 	@ApiOperation("Exclui uma cidade por Id")
 	public void remover(
-			@ApiParam(value = "ID de uma cidade", example = "1") 
+			@ApiParam(value = "ID de uma cidade", example = "1", required = true) 
 			Long cidadeId);
 	
 	
