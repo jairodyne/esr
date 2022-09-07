@@ -1,8 +1,5 @@
 package com.algaworks.algafood.api.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -54,34 +51,14 @@ public class CidadeController implements CidadeControllerOpenApi {
 	public CollectionModel<CidadeModel> listar(){
 		List<Cidade> todasCidades = cidadeRepository.findAll();
 		
-		List<CidadeModel> cidadesModel = cidadeModelAssembler.toCollectionModel(todasCidades);
+		return cidadeModelAssembler.toCollectionModel(todasCidades);
 		
-		cidadesModel.forEach(cidadeModel -> {
-			cidadeModel.add(linkTo(methodOn(CidadeController.class).buscar(cidadeModel.getId())).withSelfRel());
-			cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-			cidadeModel.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
-		});
-		
-		CollectionModel<CidadeModel> cidadesCollectionModel = CollectionModel.of(cidadesModel);
-		cidadesCollectionModel.add(linkTo(CidadeController.class).withSelfRel());
-		return cidadesCollectionModel;
 	}
 
 	@GetMapping(path = "/{cidadeId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public CidadeModel buscar(@PathVariable Long cidadeId) {
 		Cidade cidade = cadastroCidadeService.buscarOuFalhar(cidadeId);
-		CidadeModel cidadeModel = cidadeModelAssembler.toModel(cidade);
-		
-//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades/1"));
-//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", IanaLinkRelations.COLLECTION)); //constantes do iana, se quiser usar.
-//		cidadeModel.add(Link.of("http://api.algafood.local:8080/cidades", "cidades"));
-//		cidadeModel.getEstado().add(Link.of("http://api.algafood.local:8080/estados/1"));
-		
-		cidadeModel.add(linkTo(methodOn(CidadeController.class).buscar(cidadeModel.getId())).withSelfRel());
-		cidadeModel.add(linkTo(methodOn(CidadeController.class).listar()).withRel("cidades"));
-		cidadeModel.add(linkTo(methodOn(EstadoController.class).buscar(cidadeModel.getEstado().getId())).withSelfRel());
-		
-		return cidadeModel;
+		return cidadeModelAssembler.toModel(cidade);
 	}
 
 	
