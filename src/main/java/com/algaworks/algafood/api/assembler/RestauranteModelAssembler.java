@@ -29,9 +29,8 @@ public class RestauranteModelAssembler
     @Override
     public RestauranteModel toModel(Restaurante restaurante) {
         RestauranteModel restauranteModel = createModelWithId(restaurante.getId(), restaurante);
-
-		// Usar o ModelMapper é justamente fazer todo o trampo comentado abaixo. Ele seta direitinho tudo !
         modelMapper.map(restaurante, restauranteModel);
+        // Usar o ModelMapper é justamente fazer todo o trampo comentado abaixo. Ele seta direitinho tudo !
 //		CozinhaModel cozinhaModel = new CozinhaModel();
 //		cozinhaModel.setId(restaurante.getCozinha().getId());
 //		cozinhaModel.setNome(restaurante.getCozinha().getNome());
@@ -42,38 +41,50 @@ public class RestauranteModelAssembler
 //		restauranteModel.setTaxaFrete(restaurante.getTaxaFrete());
 //		restauranteModel.setCozinha(cozinhaModel);
 //		return restauranteModel;
-
+        
         restauranteModel.add(algaLinks.linkToRestaurantes("restaurantes"));
+        
+        if (restaurante.ativacaoPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToAtivarRestaurante(restaurante.getId(), "ativar"));
+        }
 
-        if(restaurante.ativacaoPermitida()) {
-        	restauranteModel.add(algaLinks.linkToAtivarRestaurante(restaurante.getId(), "ativar"));
+        if (restaurante.inativacaoPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToInativarRestaurante(restaurante.getId(), "inativar"));
+        }
+
+        if (restaurante.aberturaPermitida()) {
+            restauranteModel.add(
+                    algaLinks.linkToAbrirRestaurante(restaurante.getId(), "abrir"));
+        }
+
+        if (restaurante.fechamentoPermitido()) {
+            restauranteModel.add(
+                    algaLinks.linkToFecharRestaurante(restaurante.getId(), "fechar"));
         }
         
-        if(restaurante.inativacaoPermitida()) {
-        	restauranteModel.add(algaLinks.linkToInativarRestaurante(restaurante.getId(), "inativar"));
-        }
-        
-        if(restaurante.aberturaPermitida()) {
-        	restauranteModel.add(algaLinks.linkToAbrirRestaurante(restaurante.getId(), "abrir"));
-        }
-        
-        if(restaurante.fechamentoPermitido()) {
-        	restauranteModel.add(algaLinks.linkToFecharRestaurante(restaurante.getId(), "fechar"));
-        }
+        restauranteModel.add(algaLinks.linkToProdutos(restaurante.getId(), "produtos"));
         
         restauranteModel.getCozinha().add(
                 algaLinks.linkToCozinha(restaurante.getCozinha().getId()));
         
-        restauranteModel.getEndereco().getCidade().add(
-                algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        if (restauranteModel.getEndereco() != null 
+                && restauranteModel.getEndereco().getCidade() != null) {
+            restauranteModel.getEndereco().getCidade().add(
+                    algaLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
+        }
         
         restauranteModel.add(algaLinks.linkToRestauranteFormasPagamento(restaurante.getId(), 
                 "formas-pagamento"));
         
-        restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(), "responsaveis"));
+        restauranteModel.add(algaLinks.linkToRestauranteResponsaveis(restaurante.getId(), 
+                "responsaveis"));
         
         return restauranteModel;
     }
+    
+    
     
     @Override
     public CollectionModel<RestauranteModel> toCollectionModel(Iterable<? extends Restaurante> entities) {
