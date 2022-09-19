@@ -41,6 +41,8 @@ import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PermissoesModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.ProdutosModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.RestaurantesBasicoModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.UsuariosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -118,7 +120,6 @@ public class SpringFoxConfig {
       .alternateTypeRules(AlternateTypeRules.newRule(
     	        typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
     	        UsuariosModelOpenApi.class))
-      
       .apiInfo(apiInfo())
       .tags(new Tag("Cidades", "Gerencia as Cidades do bagulho"),
 	        new Tag("Grupos", "Gerencia os grupos de usuários"), 
