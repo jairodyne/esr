@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
+//	@ApiOperation(value = "Lista restaurantes")
     @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
     @ApiImplicitParams({
         @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
@@ -33,6 +34,7 @@ public interface RestauranteControllerOpenApi {
 //    @JsonView(RestauranteView.Resumo.class)
     CollectionModel<RestauranteBasicoModel> listar();
     
+   
     @ApiOperation(value = "Lista restaurantes", hidden = true)
     CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
     
