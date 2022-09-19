@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -29,6 +28,7 @@ import com.algaworks.algafood.api.model.FormaPagamentoModel;
 import com.algaworks.algafood.api.model.GrupoModel;
 import com.algaworks.algafood.api.model.PedidoResumoModel;
 import com.algaworks.algafood.api.model.PermissaoModel;
+import com.algaworks.algafood.api.model.ProdutoModel;
 import com.algaworks.algafood.api.openapi.model.CidadesModelModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.CozinhasModelOpenapi;
 import com.algaworks.algafood.api.openapi.model.EstadosModelOpenApi;
@@ -38,6 +38,7 @@ import com.algaworks.algafood.api.openapi.model.LinksModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PageableModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PedidosResumoModelOpenApi;
 import com.algaworks.algafood.api.openapi.model.PermissoesModelOpenApi;
+import com.algaworks.algafood.api.openapi.model.ProdutoModelOpenApi.ProdutosModelOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -106,6 +107,9 @@ public class SpringFoxConfig {
       .alternateTypeRules(AlternateTypeRules.newRule(
     	        typeResolver.resolve(CollectionModel.class, PermissaoModel.class),
     	        PermissoesModelOpenApi.class))
+      .alternateTypeRules(AlternateTypeRules.newRule(
+    		  typeResolver.resolve(CollectionModel.class, ProdutoModel.class),
+    		  ProdutosModelOpenApi.class))
       .apiInfo(apiInfo())
       .tags(new Tag("Cidades", "Gerencia as Cidades do bagulho"),
 	        new Tag("Grupos", "Gerencia os grupos de usuários"), 
