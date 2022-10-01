@@ -65,13 +65,14 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SpringFoxConfig {
 
   @Bean
-  public Docket apiDocket() {
+  public Docket apiDocketV1() {
 	  var typeResolver = new TypeResolver();
 	  
     return new Docket(DocumentationType.OAS_30)
+    	.groupName("V1")
 		.select()
           .apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
-          .paths(PathSelectors.any())
+          .paths(PathSelectors.ant("/v1/**"))
 //          .paths(PathSelectors.ant("/restaurantes/*")) // exemplo de exibir todos que comecem com "/restaurantes/*" .
           .build()
       .useDefaultResponseMessages(false)
@@ -120,7 +121,7 @@ public class SpringFoxConfig {
       .alternateTypeRules(AlternateTypeRules.newRule(
     	        typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
     	        UsuariosModelOpenApi.class))
-      .apiInfo(apiInfo())
+      .apiInfo(apiInfoV1())
       .tags(new Tag("Cidades", "Gerencia as Cidades do bagulho"),
 	        new Tag("Grupos", "Gerencia os grupos de usuários"), 
 	        new Tag("Cozinhas", "Gerencia as cozinhas"),
@@ -133,6 +134,39 @@ public class SpringFoxConfig {
             new Tag("Estatísticas", "Estatísticas da AlgaFood"),
             new Tag("Permissões", "Gerencia as permissões")
 	        );
+  }
+  
+  
+  @Bean
+  public Docket apiDocketV2() {
+	  var typeResolver = new TypeResolver();
+	  
+	  return new Docket(DocumentationType.OAS_30)
+			  .groupName("V2")
+			  .select()
+			  .apis(RequestHandlerSelectors.basePackage("com.algaworks.algafood.api"))
+			  .paths(PathSelectors.ant("/v2/**"))
+//          .paths(PathSelectors.ant("/restaurantes/*")) // exemplo de exibir todos que comecem com "/restaurantes/*" .
+			  .build()
+			  .useDefaultResponseMessages(false)
+			  .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+			  .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+			  .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+			  .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+//      .globalRequestParameters(Collections.singletonList(
+//              new RequestParameterBuilder()
+//              .name("campos")
+//              .description("Nomes das propriedades para filtrar na resposta, separados por vírgula")
+//              .in(ParameterType.QUERY)
+//              .required(true)
+//              .query(q -> q.model(m -> m.scalarModel(ScalarType.STRING)))
+//              .build())
+//)
+			  .additionalModels(typeResolver.resolve(Problem.class))
+			  .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class, Resource.class, File.class, InputStream.class)
+			  .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+			  .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+			  .apiInfo(apiInfoV2());
   }
   
   
@@ -198,11 +232,20 @@ public class SpringFoxConfig {
 	}  
   
   
-  private ApiInfo apiInfo() {
+  private ApiInfo apiInfoV1() {
 	  return new ApiInfoBuilder()
 			  .title("AlgaFood API")
 			  .description("API aberta para Clientes e Restaurantes")
 			  .version("1")
+			  .contact(new Contact("Algaworks", "https://algaworks.com", "jairodyne@gmail.com"))
+			  .build();
+  }
+  
+  private ApiInfo apiInfoV2() {
+	  return new ApiInfoBuilder()
+			  .title("AlgaFood API")
+			  .description("API aberta para Clientes e Restaurantes")
+			  .version("2")
 			  .contact(new Contact("Algaworks", "https://algaworks.com", "jairodyne@gmail.com"))
 			  .build();
   }
