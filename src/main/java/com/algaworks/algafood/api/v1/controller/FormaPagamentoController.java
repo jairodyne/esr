@@ -33,7 +33,7 @@ import com.algaworks.algafood.domain.repository.FormaPagamentoRepository;
 import com.algaworks.algafood.domain.service.CadastroFormaPagamentoService;
 
 @RestController
-@RequestMapping("/formas_pagamento")
+@RequestMapping("/v1/formas_pagamento")
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 	
 	@Autowired
