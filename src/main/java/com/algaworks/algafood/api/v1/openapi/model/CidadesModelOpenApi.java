@@ -11,7 +11,7 @@ import lombok.Data;
 
 @ApiModel("CidadesModel")
 @Data
-public class CidadesModelModelOpenApi {
+public class CidadesModelOpenApi {
 	
 	private CidadeEmbeddedModelOpenApi _embedded;
 	private Links _links;
