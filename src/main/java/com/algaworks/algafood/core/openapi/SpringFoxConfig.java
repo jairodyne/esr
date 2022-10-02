@@ -68,7 +68,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SpringFoxConfig {
 
-  @Bean
+//  @Bean   comentado para não exibir da V1 que foi terminada. Pode-se excluir todo o método, se quiser.
   public Docket apiDocketV1() {
 	  var typeResolver = new TypeResolver();
 	  
