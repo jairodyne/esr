@@ -242,8 +242,10 @@ public class SpringFoxConfig {
   
   private ApiInfo apiInfoV1() {
 	  return new ApiInfoBuilder()
-			  .title("AlgaFood API")
-			  .description("API aberta para Clientes e Restaurantes")
+			  .title("AlgaFood API - Deprecated")
+			  .description("API aberta para Clientes e Restaurantes.<br>"
+					  + "<strong>Esta versão da API está depreciada e deixará de existir a partir de 01/01/2023.</strong>"
+					  + " Use a versão mais atual da API.")
 			  .version("1")
 			  .contact(new Contact("Algaworks", "https://algaworks.com", "jairodyne@gmail.com"))
 			  .build();
