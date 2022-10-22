@@ -78,13 +78,13 @@ insert into grupo (nome) values ('Diretor'), ('Gerente'), ('Secretária'), ('Ven
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (1, 3),(1, 4),(1, 5), (2, 1), (2, 3), (2, 4), (2, 5), (3, 1), (3, 3), (4, 3); 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'João da Silva', 'joao.ger@algafood.com', '123', utc_timestamp),
-(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
-(3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
-(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
-(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
-(6, 'Débora Mendonça', 'jairodyne+debora@gmail.com', '123', utc_timestamp),
-(7, 'Carlos Lima', 'jairodyne+carlos@gmail.com', '123', utc_timestamp);
+(1, 'João da Silva', 'joao.ger@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(2, 'Maria Joaquina', 'maria.vnd@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(3, 'José Souza', 'jose.aux@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(6, 'Débora Mendonça', 'jairodyne+debora@gmail.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(7, 'Carlos Lima', 'jairodyne+carlos@gmail.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp);
 
 
 insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (1, 3),(1, 4),(1, 5), (2, 1), (2, 3), (2, 4), (2, 5), (3, 1), (3, 3), (4, 3); 
