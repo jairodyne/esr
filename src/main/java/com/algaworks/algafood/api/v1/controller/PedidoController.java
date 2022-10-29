@@ -27,6 +27,7 @@ import com.algaworks.algafood.api.v1.model.input.PedidoInput;
 import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
+import com.algaworks.algafood.core.security.AlgaSecurity;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -58,7 +59,10 @@ public class PedidoController implements PedidoControllerOpenApi {
     private PedidoInputDisassembler pedidoInputDisassembler;
 
     @Autowired
-    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;    
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;  
+    
+    @Autowired
+    private AlgaSecurity algaSecurity;
     
 //    @GetMapping
 //    public MappingJacksonValue listar(@RequestParam(required = false) String campos) {
@@ -118,9 +122,8 @@ public class PedidoController implements PedidoControllerOpenApi {
 		try {
 			Pedido novoPedido = pedidoInputDisassembler.toDomainObject(pedidoInput);
 			
-		       // TODO pegar usuário autenticado
 	        novoPedido.setCliente(new Usuario());
-	        novoPedido.getCliente().setId(1L);
+	        novoPedido.getCliente().setId(algaSecurity.getUsuarioId());
 			
 			return pedidoModelAssembler.toModel(emissaoPedidoService.emitir(novoPedido));
 			
