@@ -28,6 +28,7 @@ import com.algaworks.algafood.api.v1.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.algafood.core.data.PageWrapper;
 import com.algaworks.algafood.core.data.PageableTranslator;
 import com.algaworks.algafood.core.security.AlgaSecurity;
+import com.algaworks.algafood.core.security.CheckSecurity;
 import com.algaworks.algafood.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.algafood.domain.exception.NegocioException;
@@ -83,7 +84,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 //        
 //        return pedidosWrapper;
 //    }
-    
+      
     @GetMapping
     public PagedModel<PedidoResumoModel> pesquisar(PedidoFilter filtro, 
             @PageableDefault(size = 10) Pageable pageable) {
@@ -108,6 +109,8 @@ public class PedidoController implements PedidoControllerOpenApi {
 }
 
 
+    @CheckSecurity.Pedidos.PodeBuscar
+    @Override
 	@GetMapping("/{codigoPedido}")
     public PedidoModel buscar(@PathVariable String codigoPedido) {
         Pedido pedido = emissaoPedidoService.buscarOuFalhar(codigoPedido);
