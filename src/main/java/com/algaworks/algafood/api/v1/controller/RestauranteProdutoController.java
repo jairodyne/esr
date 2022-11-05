@@ -81,7 +81,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	}
 	
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public ProdutoModel adicionar(@PathVariable Long restauranteId, @RequestBody @Valid ProdutoInput produtoInput) {
@@ -93,7 +93,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 	}
 
 	
-	@CheckSecurity.Restaurantes.PodeEditar
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
 	@PutMapping("/{produtoId}")
 	public ProdutoModel atualizar(@PathVariable Long restauranteId, @PathVariable Long produtoId , @RequestBody @Valid ProdutoInput produtoInput) {
 		Produto produtoAtual = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
