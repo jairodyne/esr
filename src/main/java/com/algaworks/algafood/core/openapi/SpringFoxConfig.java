@@ -202,9 +202,6 @@ public class SpringFoxConfig {
   // ===
   
   
-  
-  
-  
   @Bean
 	public Docket apiDocketV2() {
 		var typeResolver = new TypeResolver();
