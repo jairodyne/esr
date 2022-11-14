@@ -52,23 +52,31 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.github.classgraph.Resource;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.HttpAuthenticationScheme;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SpringFoxConfig {
 
-//  @Bean   comentado para não exibir da V1 que foi terminada. Pode-se excluir todo o método, se quiser.
+  @Bean  // comentado para não exibir da V1 que foi terminada. Pode-se excluir todo o método, se quiser.
   public Docket apiDocketV1() {
 	  var typeResolver = new TypeResolver();
 	  
@@ -125,6 +133,11 @@ public class SpringFoxConfig {
       .alternateTypeRules(AlternateTypeRules.newRule(
     	        typeResolver.resolve(CollectionModel.class, UsuarioModel.class),
     	        UsuariosModelOpenApi.class))
+//      .securitySchemes(Arrays.asList(securityScheme()))
+      .securityContexts(Arrays.asList(securityContext()))
+      .securitySchemes(List.of(authenticationScheme()))
+      .securityContexts(List.of(securityContext()))
+//      .securityContexts(Arrays.asList(securityContext()))
       .apiInfo(apiInfoV1())
       .tags(new Tag("Cidades", "Gerencia as Cidades do bagulho"),
 	        new Tag("Grupos", "Gerencia os grupos de usuários"), 
@@ -139,6 +152,57 @@ public class SpringFoxConfig {
             new Tag("Permissões", "Gerencia as permissões")
 	        );
   }
+  
+  private SecurityScheme securityScheme() {
+	  return new OAuthBuilder()
+			  .name("AlgaFood")
+			  .grantTypes(grantTypes())
+			  .scopes(scopes())
+			  .build();
+  }
+  
+//  private SecurityContext securityContext() {
+//	  var securityReference = SecurityReference.builder()
+//			  .reference("AlgaFood")
+//			  .scopes(scopes().toArray(new AuthorizationScope[0]))
+//			  .build();
+//	  
+//	  return SecurityContext.builder()
+//			  .securityReferences(Arrays.asList(securityReference))
+//			  .forPaths(PathSelectors.any())
+//			  .build();
+//  }
+  
+  private List<GrantType> grantTypes(){
+	  return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+  }
+  
+  private List<AuthorizationScope> scopes(){
+	  return Arrays.asList(new AuthorizationScope("READ", "Acesso de Leitura"),
+			  new AuthorizationScope("WRITE", "Acesso de Escrita"));
+  }
+  
+  // === Problemas na exibição da tela de autenticação com o Spring Fox 3
+  
+  private SecurityContext securityContext() {
+	  return SecurityContext.builder()
+	        .securityReferences(securityReference()).build();
+	}
+
+	private List<SecurityReference> securityReference() {
+	  AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+	  AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+	  authorizationScopes[0] = authorizationScope;
+	  return List.of(new SecurityReference("Authorization", authorizationScopes));
+	}
+
+	private HttpAuthenticationScheme authenticationScheme() {
+	  return HttpAuthenticationScheme.JWT_BEARER_BUILDER.name("Authorization").build();
+	}
+  // ===
+  
+  
+  
   
   
   @Bean
