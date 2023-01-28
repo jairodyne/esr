@@ -5,136 +5,32 @@ import java.util.List;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
-import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.v1.model.RestauranteApenasNomeModel;
 import com.algaworks.algafood.api.v1.model.RestauranteBasicoModel;
 import com.algaworks.algafood.api.v1.model.RestauranteModel;
 import com.algaworks.algafood.api.v1.model.input.RestauranteInput;
-import com.algaworks.algafood.api.v1.openapi.model.RestauranteBasicoModelOpenApi;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import springfox.documentation.annotations.ApiIgnore;
-
-@Api(tags = "Restaurantes")
 public interface RestauranteControllerOpenApi {
 
-//	@ApiOperation(value = "Lista restaurantes")
-    @ApiOperation(value = "Lista restaurantes", response = RestauranteBasicoModelOpenApi.class)
-    @ApiImplicitParams({
-        @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
-                name = "projecao", paramType = "query", type = "string")
-    })
-//    @JsonView(RestauranteView.Resumo.class)
-    CollectionModel<RestauranteBasicoModel> listar();
-    
-   
-    @ApiIgnore
-    @ApiOperation(value = "Lista restaurantes", hidden = true)
-    CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
-    
-    @ApiOperation("Busca um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "400", description = "ID do restaurante é inválido", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    RestauranteModel buscar(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId);
-    
-    @ApiOperation("Cadastra um restaurante")
-    @ApiResponses({
-		@ApiResponse(responseCode = "201", description = "Restaurante cadastrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    RestauranteModel adicionar(
-            @ApiParam(name = "corpo", value = "Representação de um novo restaurante", required = true)
-            RestauranteInput restauranteInput);
-    
-    @ApiOperation("Atualiza um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Restaurante atualizado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    RestauranteModel atualizar(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId,
-            
-            @ApiParam(name = "corpo", value = "Representação de um restaurante com os novos dados", 
-                required = true)
-            RestauranteInput restauranteInput);
-    
-    @ApiOperation("Ativa um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurante ativado com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    ResponseEntity<Void> ativar(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId);
-    
-    @ApiOperation("Inativa um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurante inativado com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    ResponseEntity<Void> inativar(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId);
-    
-    @ApiOperation("Ativa múltiplos restaurantes")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurantes ativados com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    void ativarMultiplos(
-            @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
-            List<Long> restauranteIds);
-    
-    @ApiOperation("Inativa múltiplos restaurantes")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurantes inativados com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    void inativarMultiplos(
-            @ApiParam(name = "corpo", value = "IDs de restaurantes", required = true)
-            List<Long> restauranteIds);
+	CollectionModel<RestauranteBasicoModel> listar();
 
-    @ApiOperation("Abre um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurante aberto com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    ResponseEntity<Void> abrir(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId);
-    
-    @ApiOperation("Fecha um restaurante por ID")
-    @ApiResponses({
-		@ApiResponse(responseCode = "204", description = "Restaurante fechado com sucesso", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class))),
-		@ApiResponse(responseCode = "404", description = "Restaurante não encontrado", 
-		content = @Content(mediaType = "application/json",  schema = @Schema(implementation = Problem.class)))
-    })
-    ResponseEntity<Void> fechar(
-            @ApiParam(value = "ID de um restaurante", example = "1", required = true)
-            Long restauranteId);
+	CollectionModel<RestauranteApenasNomeModel> listarApenasNomes();
 
+	RestauranteModel buscar(Long restauranteId);
+
+	RestauranteModel adicionar(RestauranteInput restauranteInput);
+
+	RestauranteModel atualizar(Long restauranteId,RestauranteInput restauranteInput);
+
+	ResponseEntity<Void> ativar(Long restauranteId);
+
+	ResponseEntity<Void> inativar(Long restauranteId);
+
+	ResponseEntity<Void> ativarMultiplos(List<Long> restauranteIds);
+
+	ResponseEntity<Void> inativarMultiplos(List<Long> restauranteIds);
+
+	ResponseEntity<Void> abrir(Long restauranteId);
+
+	ResponseEntity<Void> fechar(Long restauranteId);
 }

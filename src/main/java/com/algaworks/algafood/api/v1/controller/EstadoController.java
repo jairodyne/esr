@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,46 +46,58 @@ public class EstadoController implements EstadoControllerOpenApi {
 	private EstadoInputDisassembler estadoInputDisassembler;
 	
 	@CheckSecurity.Estados.PodeConsultar
+	@Override
 	@GetMapping
-	public CollectionModel<EstadoModel> listar(){
+	public CollectionModel<EstadoModel> listar() {
 		List<Estado> todosEstados = estadoRepository.findAll();
+		
 		return estadoModelAssembler.toCollectionModel(todosEstados);
 	}
 	
-	
 	@CheckSecurity.Estados.PodeConsultar
+	@Override
 	@GetMapping("/{estadoId}")
-	public EstadoModel buscar(@PathVariable Long estadoId){
+	public EstadoModel buscar(@PathVariable Long estadoId) {
 		Estado estado = cadastroEstadoService.buscarOuFalhar(estadoId);
+		
 		return estadoModelAssembler.toModel(estado);
 	}
 	
-	
 	@CheckSecurity.Estados.PodeEditar
+	@Override
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoModel adicionar(@RequestBody @Valid EstadoInput estadoInput) {
 		Estado estado = estadoInputDisassembler.toDomainObject(estadoInput);
+		
 		estado = cadastroEstadoService.salvar(estado);
+		
 		return estadoModelAssembler.toModel(estado);
 	}
-
 	
 	@CheckSecurity.Estados.PodeEditar
+	@Override
 	@PutMapping("/{estadoId}")
-	public EstadoModel atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoInput estadoInput){
+	public EstadoModel atualizar(@PathVariable Long estadoId,
+			@RequestBody @Valid EstadoInput estadoInput) {
 		Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(estadoId);
+		
 		estadoInputDisassembler.copyToDomainObject(estadoInput, estadoAtual);
+		
 		estadoAtual = cadastroEstadoService.salvar(estadoAtual);
+		
 		return estadoModelAssembler.toModel(estadoAtual);
 	}
 	
-	
 	@CheckSecurity.Estados.PodeEditar
+	@Override
 	@DeleteMapping("/{estadoId}")
-	public void remover(@PathVariable Long estadoId) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<Void> remover(@PathVariable Long estadoId) {
 		cadastroEstadoService.excluir(estadoId);
+		return ResponseEntity.noContent().build();
 	}
+	
 	
 
 }

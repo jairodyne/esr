@@ -38,27 +38,28 @@ import com.algaworks.algafood.domain.service.FotoStorageService.FotoRecuperada;
 
 @RestController
 @RequestMapping(path = "/v1/restaurantes/{restauranteId}/produtos/{produtoId}/foto",
-produces = MediaType.APPLICATION_JSON_VALUE)
+		produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
+
+	@Autowired
+	private CadastroProdutoService cadastroProduto;
 	
 	@Autowired
-	private CadastroProdutoService cadastroProdutoService;
+	private CatalogoFotoProdutoService catalogoFotoProduto;
 	
 	@Autowired
-	private CatalogoFotoProdutoService catalogoFotoProdutoService;
+	private FotoStorageService fotoStorage;
 	
 	@Autowired
 	private FotoProdutoModelAssembler fotoProdutoModelAssembler;
 	
-	@Autowired
-	private FotoStorageService fotoStorageService;
-	
 	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
+	@Override
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, 
-			@Valid FotoProdutoInput fotoProdutoInput, @RequestPart(required = true) MultipartFile arquivo) throws IOException {
-	
-		Produto produto = cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
+	public FotoProdutoModel atualizarFoto(@PathVariable Long restauranteId,
+			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput,
+			@RequestPart(required = true) MultipartFile arquivo) throws IOException {
+		Produto produto = cadastroProduto.buscarOuFalhar(restauranteId, produtoId);
 		
 //		MultipartFile arquivo = fotoProdutoInput.getArquivo();
 		
@@ -68,36 +69,49 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		foto.setContentType(arquivo.getContentType());
 		foto.setTamanho(arquivo.getSize());
 		foto.setNomeArquivo(arquivo.getOriginalFilename());
-	
-		FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(foto, arquivo.getInputStream());
-		return fotoProdutoModelAssembler.toModel(fotoSalva);
 		
+		FotoProduto fotoSalva = catalogoFotoProduto.salvar(foto, arquivo.getInputStream());
+		
+		return fotoProdutoModelAssembler.toModel(fotoSalva);
+	}
+	
+	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
+	@Override
+	@DeleteMapping
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public ResponseEntity<Void> excluir(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId) {
+		catalogoFotoProduto.excluir(restauranteId, produtoId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@CheckSecurity.Restaurantes.PodeConsultar
+	@Override
 	@GetMapping
-	public FotoProdutoModel buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-		FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
-		return fotoProdutoModelAssembler.toModel(fotoProduto);
+	public FotoProdutoModel buscar(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId) {
+		FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
 		
+		return fotoProdutoModelAssembler.toModel(fotoProduto);
 	}
-
+	
+	// As fotos dos produtos ficarão públicas (não precisa de autorização para acessá-las)
+	@Override
 	@GetMapping(produces = MediaType.ALL_VALUE)
-	public ResponseEntity<?> servirFoto(@PathVariable Long restauranteId, 
-			@PathVariable Long produtoId, @RequestHeader(name="accept") String acceptHeader) throws HttpMediaTypeNotAcceptableException {
+	public ResponseEntity<?> servir(@PathVariable Long restauranteId, 
+			@PathVariable Long produtoId, @RequestHeader(name = "accept") String acceptHeader) 
+					throws HttpMediaTypeNotAcceptableException {
 		try {
-			FotoProduto fotoProduto = catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
-
-			/**
-			 * Checando o MediaType. 
-			 */
+			FotoProduto fotoProduto = catalogoFotoProduto.buscarOuFalhar(restauranteId, produtoId);
+			
 			MediaType mediaTypeFoto = MediaType.parseMediaType(fotoProduto.getContentType());
 			List<MediaType> mediaTypesAceitas = MediaType.parseMediaTypes(acceptHeader);
+			
 			verificarCompatibilidadeMediaType(mediaTypeFoto, mediaTypesAceitas);
 			
-			FotoRecuperada fotoRecuperada = fotoStorageService.recuperar(fotoProduto.getNomeArquivo());
+			FotoRecuperada fotoRecuperada = fotoStorage.recuperar(fotoProduto.getNomeArquivo());
 			
-			if(fotoRecuperada.temUrl()) {
+			if (fotoRecuperada.temUrl()) {
 				return ResponseEntity
 						.status(HttpStatus.FOUND)
 						.header(HttpHeaders.LOCATION, fotoRecuperada.getUrl())
@@ -112,24 +126,15 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 		}
 	}
 
-	
-	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+	private void verificarCompatibilidadeMediaType(MediaType mediaTypeFoto, 
+			List<MediaType> mediaTypesAceitas) throws HttpMediaTypeNotAcceptableException {
+		
 		boolean compativel = mediaTypesAceitas.stream()
 				.anyMatch(mediaTypeAceita -> mediaTypeAceita.isCompatibleWith(mediaTypeFoto));
 		
-		if(!compativel) {
+		if (!compativel) {
 			throw new HttpMediaTypeNotAcceptableException(mediaTypesAceitas);
 		}
-		
 	}
-
 	
-	@CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
-	@DeleteMapping
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void excluir(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
-		catalogoFotoProdutoService.excluir(restauranteId, produtoId);
-	}
-
-
 }
