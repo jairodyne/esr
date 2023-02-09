@@ -1,5 +1,6 @@
 package com.algaworks.algafood.core.springdoc;
 
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +12,68 @@ import io.swagger.v3.oas.models.info.License;
 @Configuration
 public class SpringDocConfig {
 	
-	@Bean
-	public OpenAPI openApi() {
-		
-		return new OpenAPI()
-				.info(new Info()
-						.title("Algafood API")
-						.version("v1")
-						.description("REST API do Algafood - by Dynes")
-						.license(new License()
-								.name("Apache 2.0")
-								.url("http://springdoc.com")
-						)
-				).externalDocs(new ExternalDocumentation()
-						.description("Documentação da API")
-						.url("https://dynes.com")
-				);
-	}
+//	@Bean
+//	public OpenAPI openApi() {
+//		
+//		return new OpenAPI()
+//				.info(new Info()
+//						.title("Algafood API")
+//						.version("v1")
+//						.description("REST API do Algafood - by Dynes")
+//						.license(new License()
+//								.name("Apache 2.0")
+//								.url("http://springdoc.com")
+//						)
+//				).externalDocs(new ExternalDocumentation()
+//						.description("Documentação da API")
+//						.url("https://dynes.com")
+//				);
+//	}
 
+	@Bean
+	public GroupedOpenApi groupedOpenApi() {
+		return GroupedOpenApi.builder()
+				.group("Algafood Outra API")
+				.pathsToMatch("/v1/**")
+				.addOpenApiCustomiser(openApi -> {
+					openApi.info(new Info()
+							.title("Algafood API")
+							.version("v1")
+							.description("REST API do Algafood - by Dynes")
+							.license(new License()
+									.name("Apache 2.0")
+									.url("http://springdoc.com")
+							)
+					).externalDocs(new ExternalDocumentation()
+							.description("Documentação da API")
+							.url("https://dynes.com")
+					);
+					
+				})
+				.build();
+	}
+	
+	@Bean
+	public GroupedOpenApi groupedOpenApiCliente() {
+		return GroupedOpenApi.builder()
+				.group("Algafood Outra API Cliente")
+				.pathsToMatch("/cliente/v1/**")
+				.addOpenApiCustomiser(openApi -> {
+					openApi.info(new Info()
+							.title("Algafood API  Cliente")
+							.version("v1")
+							.description("REST API do Algafood - by Dynes")
+							.license(new License()
+									.name("Apache 2.0")
+									.url("http://springdoc.com")
+									)
+							).externalDocs(new ExternalDocumentation()
+									.description("Documentação da API")
+									.url("https://dynes.com")
+									);
+					
+				})
+				.build();
+	}
+	
 }
