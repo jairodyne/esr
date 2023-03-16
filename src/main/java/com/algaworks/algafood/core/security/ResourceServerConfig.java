@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
-public class SecurityServerConfig {
+public class ResourceServerConfig {
 	
 	@Bean
 	public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
@@ -19,7 +19,7 @@ public class SecurityServerConfig {
 			.and()
 			.csrf().disable()
 			.cors().and()
-			.oauth2ResourceServer().opaqueToken();
+			.oauth2ResourceServer().jwt();
 		
 		return http.build();
 	}
