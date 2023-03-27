@@ -107,7 +107,7 @@ select 4, id from permissao where nome like '%_RESTAURANTES';
  
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'João da Silva', 'joao.ger@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
+(1, 'João da Silva', 'joao.ger@algafood.com', '$2a$12$aD3K2FqI4ED1/7omvFzEQ.WRuPNNZDIOYaMhdZqwuK3sL4aJsbdn.', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
 (3, 'José Souza', 'jose.aux@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '$2a$12$wIgTN9v3qxGvrpoEZxEzMOHjUX95lUjhUC4Cl28FYXw0yFE3l1PrS', utc_timestamp),
